@@ -4,24 +4,28 @@
 #include <cassert>
 #define varepsilon 'e'
 
-int main() {
-    std::cout << varepsilon;
-    CAutomata whatever('a');
-
-    return 0;
-}
-
 // 0 подразумевается initial state всегда
 class CAutomata {
 public:
-//    size_t getStatesCount() { return states_count; };
+    //    size_t getStatesCount() { return states_count; };
 
     // Простой конструктор для автомата задающего язык из одной буквы
     explicit CAutomata(char symbol);
 
     // Конструктор для сложения, конъюнкции или звезды клини
-    CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation);
+    CAutomata(CAutomata *first, CAutomata *second, char operation);
 
+    void PrintAutomata() {
+        std::cout << "\n\nShowing automata:\n- - - - - - - - -";
+        for (size_t i = 0; i < states_count; i++) {
+            for (size_t j = 0; j < states_count; j++) {
+
+                for (char v : edges_matrix[i][j])
+                    std::cout << "\n" << i << " --" << v << "--> " << j;
+            }
+        }
+        std::cout << "\n-~-~-~-~-~-~-~-~-";
+    }
 
 protected:
     // Матрица n*n наборов (множеств) символов
@@ -33,22 +37,29 @@ protected:
     size_t states_count;
 };
 
-explicit CAutomata::CAutomata(char symbol) {
+CAutomata::CAutomata(char symbol) {
+    // Случай автомата получаемого из символа '1'
+    // Он состоит из единственного состояния
+    // которое одновременно начальное и конечное
     if (symbol == '1') {
         states_count=1;
-        // Заполняем матрицу графа
+
         edges_matrix.resize(states_count);
         edges_matrix[0].resize(states_count);
-        // Добавляем терминальные вершины
+
         accepting_states.insert(0);
-    } else {
+    }
+    // Случай автомата получаемого из буквы 'a', 'b', 'c'
+    // Состояний у нас 2, начальное и конечное
+    // Есть ребро с данным символом из начального в конечное
+    else {
         assert(symbol == 'a' || symbol == 'b' || symbol == 'c');
         states_count=2;
-        // Заполняем матрицу графа
+
         edges_matrix.resize(states_count);
         for (auto&& i : edges_matrix) i.resize(states_count);
         edges_matrix[0][1].insert(symbol);
-        // Добавляем терминальные вершины
+
         accepting_states.insert(1);
     }
 }
@@ -56,12 +67,15 @@ explicit CAutomata::CAutomata(char symbol) {
 CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
     switch (operation) {
         case '+': {
-            // Подготовили матрицу графа
+            // Состояний всего состояний в первом автомате, во втором
+            // плюс новое начальное состояние
             states_count = 1 + first->states_count + second->states_count;
             edges_matrix.resize(states_count);
             for (auto &&i: edges_matrix) i.resize(states_count);
             // Начинаем заполнять матрицу графа ребрами первого автомата
+            // Начальное состояние первого автомата лежит в offset (1)
             int offset = 1;
+            // eps-ребро из нового начального в прежнее начального первого
             edges_matrix[0][offset].insert(varepsilon);
             for (int i = 0; i < first->states_count; i++) {
                 for (int j = 0; j < first->states_count; j++) {
@@ -73,8 +87,10 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             for (int v : first->accepting_states) {
                 accepting_states.insert(v + offset);
             }
-            // Начинаем заполнять матрицу графа ребрами второго автомата
+            // Начинаем заполнять матрицу графа ребрами второго автомат
+            // Начальное состояние вторго автомата лежит в offset (1 + first->states_count)
             offset += first->states_count;
+            // eps-ребро из нового начального в прежнее начального второго
             edges_matrix[0][offset].insert(varepsilon);
             for (int i = 0; i < second->states_count; i++) {
                 for (int j = 0; j < second->states_count; j++) {
@@ -89,11 +105,40 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
         }
 
         case '.': {
-
+            ;
         }
 
         default: {
             assert(operation == '+' || operation == '.' || operation == '*');
         }
     }
+}
+
+void runTest1();
+
+int main() {
+    std::cout << varepsilon;
+
+//    runTest1();
+
+    return 0;
+}
+
+// tests for '+'
+void runTest1() {
+
+    CAutomata whatever0('a');
+    CAutomata whatever1('b');
+    whatever0.PrintAutomata();
+    whatever1.PrintAutomata();
+
+    CAutomata whatever2(&whatever0,&whatever1,'+');
+    whatever2.PrintAutomata();
+
+    CAutomata whatever3('c');
+    whatever3.PrintAutomata();
+
+    CAutomata whatever4(&whatever2,&whatever3,'+');
+    whatever4.PrintAutomata();
+
 }
