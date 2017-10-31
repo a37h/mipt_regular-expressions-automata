@@ -7,7 +7,6 @@
 // 0 подразумевается initial state всегда
 class CAutomata {
 public:
-    //    size_t getStatesCount() { return states_count; };
 
     // Простой конструктор для автомата задающего язык из одной буквы
     explicit CAutomata(char symbol);
@@ -16,11 +15,25 @@ public:
     CAutomata(CAutomata *first, CAutomata *second, char operation);
 
     void PrintAutomata() {
-        std::cout << "\n\nShowing automata:\n- - - - - - - - -";
+        std::cout << "\n\nInitial state is 0, terminal vertice is in {}\n- - - - - - - - -";
         for (size_t i = 0; i < states_count; i++) {
             for (size_t j = 0; j < states_count; j++) {
-                if ((int) edges_matrix[i][j] != 0)
-                std::cout << "\n" << i << " --" << edges_matrix[i][j] << "--> " << j;
+                char current_symbol = edges_matrix[i][j];
+                if ((int) current_symbol != 0) {
+                    if (current_symbol != 'e') {
+                        if (accepting_states.count(j)) {
+                            std::cout << "\n" << i << " --" << current_symbol << "--> {" << j << "}";
+                        } else {
+                            std::cout << "\n" << i << " --" << current_symbol << "--> ." << j << ".";
+                        }
+                    } else {
+                        if (accepting_states.count(j)) {
+                            std::cout << "\n" << i << " -----> {" << j << "}";
+                        } else {
+                            std::cout << "\n" << i << " -----> ." << j << ".";
+                        }
+                    }
+                }
             }
         }
         std::cout << "\n-~-~-~-~-~-~-~-~-";
@@ -109,14 +122,23 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
     }
 }
 
+void runTest0();
 void runTest1();
 
 int main() {
     std::cout << varepsilon;
 
-//    runTest1();
+    runTest0();
+    runTest1();
 
     return 0;
+}
+
+void runTest0() {
+
+    CAutomata whatever0('1');
+    whatever0.PrintAutomata();
+
 }
 
 // tests for '+'
