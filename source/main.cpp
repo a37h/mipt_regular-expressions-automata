@@ -48,7 +48,7 @@ protected:
     // множеству символов на ребре из i в j вершину
     // Напр.: a,b,varepsilon соответствует ребру a+b+\varepsilon
     std::vector<std::vector<char>> edges_matrix;
-    std::set<int> accepting_states;
+    std::set<size_t> accepting_states;
     size_t states_count;
 };
 
@@ -92,12 +92,12 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             int offset = 1;
             // eps-ребро из нового начального в прежнее начального первого
             edges_matrix[0][offset] = varepsilon;
-            for (int i = 0; i < first->states_count; i++) {
-                for (int j = 0; j < first->states_count; j++) {
+            for (size_t i = 0; i < first->states_count; i++) {
+                for (size_t j = 0; j < first->states_count; j++) {
                     edges_matrix[i + offset][j + offset] = first->edges_matrix[i][j];
                 }
             }
-            for (int v : first->accepting_states) {
+            for (size_t v : first->accepting_states) {
                 accepting_states.insert(v + offset);
             }
             // Начинаем заполнять матрицу графа ребрами второго автомат
@@ -105,12 +105,12 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             offset += first->states_count;
             // eps-ребро из нового начального в прежнее начального второго
             edges_matrix[0][offset] = varepsilon;
-            for (int i = 0; i < second->states_count; i++) {
-                for (int j = 0; j < second->states_count; j++) {
+            for (size_t i = 0; i < second->states_count; i++) {
+                for (size_t j = 0; j < second->states_count; j++) {
                     edges_matrix[i + offset][j + offset] = second->edges_matrix[i][j];
                 }
             }
-            for (int v : second->accepting_states) {
+            for (size_t v : second->accepting_states) {
                 accepting_states.insert(v + offset);
             }
             break;
@@ -125,26 +125,26 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             // Начальное состояние первого автомата станет новым начальным состоянием
             int offset = 0;
             // Копируем ребра из первого
-            for (int i = 0; i < first->states_count; ++i) {
-                for (int j = 0; j < first->states_count; ++j) {
+            for (size_t i = 0; i < first->states_count; ++i) {
+                for (size_t j = 0; j < first->states_count; ++j) {
                     edges_matrix[i + offset][j + offset] = first->edges_matrix[i][j];
                 }
             }
             // Начинаем заполнять матрицу графа ребрами второго автомата
             offset += first->states_count;
             // Копируем ребра из второго
-            for (int i = 0; i < second->states_count; ++i) {
-                for (int j = 0; j < second->states_count; ++j) {
+            for (size_t i = 0; i < second->states_count; ++i) {
+                for (size_t j = 0; j < second->states_count; ++j) {
                     edges_matrix[i + offset][j + offset] = second->edges_matrix[i][j];
                 }
             }
             // Добавляем eps-рёбра из терминальных ранее вершин первого автомата
             // в начальное ранее состояние второго автомата
-            for (int v : first->accepting_states) {
+            for (size_t v : first->accepting_states) {
                 edges_matrix[v][offset] = varepsilon;
             }
             // Дозаполнили терминальные вершинами терминалами второго
-            for (int v : second->accepting_states) {
+            for (size_t v : second->accepting_states) {
                 accepting_states.insert(v + offset);
             }
             break;
@@ -165,8 +165,8 @@ CAutomata::CAutomata(CAutomata *old_automata, char operation) {
         // Начинаем заполнять матрицу графа ребрами прежнего автомата
         int offset = 1;
         // Копируем ребра из прежнего
-        for (int i = 0; i < old_automata->states_count; ++i) {
-            for (int j = 0; j < old_automata->states_count; ++j) {
+        for (size_t i = 0; i < old_automata->states_count; ++i) {
+            for (size_t j = 0; j < old_automata->states_count; ++j) {
                 edges_matrix[i + offset][j + offset] = old_automata->edges_matrix[i][j];
             }
         }
@@ -174,7 +174,7 @@ CAutomata::CAutomata(CAutomata *old_automata, char operation) {
         edges_matrix[0][1] = varepsilon;
         // Добавляем eps-рёбра из терминальных ранее вершин прежнего автомата
         // в новое начальное состояние автомата
-        for (int v : old_automata->accepting_states) {
+        for (size_t v : old_automata->accepting_states) {
             edges_matrix[offset+v][0] = varepsilon;
         }
         // Единственное конечное состояние нового автомата будет
