@@ -20,7 +20,7 @@ public:
             for (size_t j = 0; j < states_count; j++) {
                 char current_symbol = edges_matrix[i][j];
                 if ((int) current_symbol != 0) {
-                    if (current_symbol != 'e') {
+                    if (current_symbol != varepsilon) {
                         if (accepting_states.count(j)) {
                             std::cout << "\n" << i << " --" << current_symbol << "--> {" << j << "}";
                         } else {
@@ -134,6 +134,17 @@ int main() {
     return 0;
 }
 
+
+
+// **********
+// **********
+// Tests side
+// **********
+// **********
+
+
+
+// tests for '1'
 void runTest0() {
 
     CAutomata whatever0('1');
