@@ -8,8 +8,14 @@ void CSolver::ShowAutomata() {
     automata.PrintAutomata();
 }
 
-CSolver::CSolver(std::string *expression_): expression(expression_) {
+CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
+        expression(expression_),
+        symbolX(symbolX_),
+        prefLengthK(prefLengthK_),
+        shadesOfGrey(0)
+{
     ParseExpression();
+    shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
 }
 
 void CSolver::ParseExpression() {
@@ -64,4 +70,17 @@ void CSolver::ParseExpression() {
 
 void CSolver::CustomDFS() {
 
+    std::stack<CRotation> DFSStack;
+
+    for (std::pair<size_t,char> v : automata.GetNextVerts(0)) {
+        CRotation temp(v.first, v.second, 0);
+        DFSStack.push(temp);
+    }
+
+    while (!DFSStack.empty()) {
+        CRotation tempVertice = DFSStack.top();
+        DFSStack.pop();
+
+
+    }
 }

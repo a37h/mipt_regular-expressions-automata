@@ -6,11 +6,12 @@
 #define SOURCE_CSOLVER_H
 
 #include "../CAutomata/cautomata.h"
+#include "CRotation/crotation.h"
 
 class CSolver {
 public:
 
-    explicit CSolver(std::string *expression_);
+    explicit CSolver(std::string *expression_, char symbolX, int prefLengthK);
     void ParseExpression();
     void ShowAutomata();
     void CustomDFS();
@@ -18,7 +19,10 @@ public:
 private:
 
     CAutomata automata;
+    std::vector<int> shadesOfGrey;
     std::string *expression;
+    char symbolX;
+    int prefLengthK;
 
 };
 

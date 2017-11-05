@@ -30,7 +30,7 @@ public:
 
     void PrintAutomata();
 
-    std::vector<std::pair<int,int>> GetNextVerts(int verticeFrom);
+    std::vector<std::pair<size_t,char>> GetNextVerts(int verticeFrom);
 
     size_t GetSize();
 

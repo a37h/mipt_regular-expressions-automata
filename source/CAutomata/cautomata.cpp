@@ -156,11 +156,11 @@ void CAutomata::PrintAutomata() {
     std::cout << "\n-~-~-~-~-~-~-~-~-";
 }
 
-std::vector<std::pair<int,int>> CAutomata::GetNextVerts(int verticeFrom) {
-    std::vector<std::pair<int,int>> result;
+std::vector<std::pair<size_t,char>> CAutomata::GetNextVerts(int verticeFrom) {
+    std::vector<std::pair<size_t,char>> result;
     for (int i = 0; i < states_count; ++i) {
         if (edges_matrix[verticeFrom][i] != (char) 0) {
-            std::pair<int,char> temp(i,edges_matrix[verticeFrom][i]);
+            std::pair<size_t,char> temp(i,edges_matrix[verticeFrom][i]);
             result.push_back(temp);
         }
     }
