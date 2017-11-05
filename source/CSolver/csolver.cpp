@@ -17,6 +17,7 @@ CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
     ParseExpression();
     shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
     CustomDFS();
+    std::cout << min_length;
 }
 
 void CSolver::ParseExpression() {
@@ -84,26 +85,71 @@ void CSolver::CustomDFS() {
     }
 
     while (!DFSStack.empty()) {
-        CRotation currentVertice = DFSStack.top();
+        CRotation currentRotation = DFSStack.top();
         DFSStack.pop();
 
 
-        if (shadesOfGrey[currentVertice.vertice] > 0) {
+        if (shadesOfGrey[currentRotation.vertice] > 0) {
 
-            for (std::pair<size_t,char> v : automata.GetNextVerts(currentVertice.vertice)) {
+            for (std::pair<size_t,char> v : automata.GetNextVerts(currentRotation.vertice)) {
                 if (v.second == varepsilon) {
-                    DFSStack.push(CRotation(v.first, currentVertice.preflength));
+                    DFSStack.push(CRotation(v.first, currentRotation.preflength));
                 } else if (v.second == symbolX) {
-                    DFSStack.push(CRotation(v.first, currentVertice.preflength+1));
+                    DFSStack.push(CRotation(v.first, currentRotation.preflength+1));
                 }
             }
         }
 
-        shadesOfGrey[currentVertice.vertice] = shadesOfGrey[currentVertice.vertice] - 1;
-//
-//        if (currentVertice.preflength == prefLengthK) {
-////            dfs(currentVertice);
-//        }
+        shadesOfGrey[currentRotation.vertice] = shadesOfGrey[currentRotation.vertice] - 1;
 
+        if (currentRotation.preflength == prefLengthK) {
+            CustomBFS(currentRotation);
+        }
+    }
+}
+
+void CSolver::CustomBFS(CRotation initialrotation) {
+
+    if (automata.isTerminal(initialrotation.vertice)) {
+        if (initialrotation.preflength < min_length || min_length == -1) {
+            min_length = (int) initialrotation.preflength;
+        }
+    }
+
+    std::queue<CRotation> BFSQueue;
+
+    std::vector<bool> UsedVerts(automata.GetSize(), false);
+
+    for (std::pair<size_t,char> v : automata.GetNextVerts(initialrotation.vertice)) {
+        if (v.second == varepsilon){
+            CRotation temp(v.first, initialrotation.preflength);
+            BFSQueue.push(temp);
+        } else  {
+            CRotation temp(v.first, initialrotation.preflength+1);
+            BFSQueue.push(temp);
+        }
+    }
+
+    while (!BFSQueue.empty()) {
+        CRotation currentRotation = BFSQueue.front();
+        BFSQueue.pop();
+
+        if (!UsedVerts[currentRotation.vertice]) {
+            for (std::pair<size_t,char> v : automata.GetNextVerts(currentRotation.vertice)) {
+                if (v.second == varepsilon) {
+                    BFSQueue.push(CRotation(v.first, currentRotation.preflength));
+                } else if (v.second == symbolX) {
+                    BFSQueue.push(CRotation(v.first, currentRotation.preflength+1));
+                }
+            }
+        }
+
+        UsedVerts[currentRotation.vertice] = true;
+
+        if (automata.isTerminal(currentRotation.vertice)) {
+            if (currentRotation.preflength < min_length || min_length == -1) {
+                min_length = (int) currentRotation.preflength;
+            }
+        }
     }
 }

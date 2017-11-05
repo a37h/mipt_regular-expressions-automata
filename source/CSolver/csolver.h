@@ -7,6 +7,8 @@
 
 #include "../CAutomata/cautomata.h"
 #include "CRotation/crotation.h"
+#include <stack>
+#include <queue>
 
 class CSolver {
 public:
@@ -15,6 +17,7 @@ public:
     void ParseExpression();
     void ShowAutomata();
     void CustomDFS();
+    void CustomBFS(CRotation initialrotation);
 
 private:
 
@@ -23,6 +26,7 @@ private:
     std::string *expression;
     char symbolX;
     int prefLengthK;
+    int min_length = -1;
 
 };
 

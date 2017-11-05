@@ -9,7 +9,6 @@
 #include <vector>
 #include <set>
 #include <cassert>
-#include <stack>
 
 #define varepsilon 'e'
 
