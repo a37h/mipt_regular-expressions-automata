@@ -1,7 +1,3 @@
-//
-// Created by qua on 05.11.17.
-//
-
 #include "cautomata.h"
 
 CAutomata::CAutomata(char symbol) {

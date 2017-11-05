@@ -1,7 +1,3 @@
-//
-// Created by qua on 05.11.17.
-//
-
 #ifndef SOURCE_CROTATION_H
 #define SOURCE_CROTATION_H
 

@@ -1,7 +1,3 @@
-//
-// Created by qua on 05.11.17.
-//
-
 #ifndef SOURCE_CSOLVER_H
 #define SOURCE_CSOLVER_H
 

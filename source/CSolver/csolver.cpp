@@ -1,7 +1,3 @@
-//
-// Created by qua on 05.11.17.
-//
-
 #include "csolver.h"
 
 void CSolver::ShowAutomata() {
