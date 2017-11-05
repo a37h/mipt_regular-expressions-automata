@@ -30,6 +30,10 @@ public:
 
     void PrintAutomata();
 
+    std::vector<std::pair<int,int>> GetNextVerts(int verticeFrom);
+
+    size_t GetSize();
+
 protected:
     // Матрица n*n наборов (множеств) символов
     // Множество символов в [i][j] ячейке соответствует
