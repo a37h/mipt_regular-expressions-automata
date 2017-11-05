@@ -13,7 +13,11 @@ CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
     ParseExpression();
     shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
     CustomDFS();
-    std::cout << min_length;
+    if (min_length == -1) {
+        std::cout << "INF";
+    } else {
+        std::cout << min_length;
+    }
 }
 
 void CSolver::ParseExpression() {
