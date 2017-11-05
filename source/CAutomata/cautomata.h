@@ -17,6 +17,8 @@
 class CAutomata {
 public:
 
+    CAutomata(): states_count(0) {};
+
     // Простой конструктор для автомата задающего язык из одной буквы
     explicit CAutomata(char symbol);
 
