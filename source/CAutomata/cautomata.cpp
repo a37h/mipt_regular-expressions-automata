@@ -156,7 +156,7 @@ void CAutomata::PrintAutomata() {
     std::cout << "\n-~-~-~-~-~-~-~-~-";
 }
 
-std::vector<std::pair<size_t,char>> CAutomata::GetNextVerts(int verticeFrom) {
+std::vector<std::pair<size_t,char>> CAutomata::GetNextVerts(size_t verticeFrom) {
     std::vector<std::pair<size_t,char>> result;
     for (int i = 0; i < states_count; ++i) {
         if (edges_matrix[verticeFrom][i] != (char) 0) {
@@ -169,4 +169,8 @@ std::vector<std::pair<size_t,char>> CAutomata::GetNextVerts(int verticeFrom) {
 
 size_t CAutomata::GetSize(){
     return states_count;
+}
+
+bool CAutomata::isTerminal(size_t vertice) {
+    return (bool) accepting_states.count(vertice);
 }

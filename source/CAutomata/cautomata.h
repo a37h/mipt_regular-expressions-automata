@@ -30,9 +30,11 @@ public:
 
     void PrintAutomata();
 
-    std::vector<std::pair<size_t,char>> GetNextVerts(int verticeFrom);
+    std::vector<std::pair<size_t,char>> GetNextVerts(size_t verticeFrom);
 
     size_t GetSize();
+
+    bool isTerminal(size_t vertice);
 
 protected:
     // Матрица n*n наборов (множеств) символов

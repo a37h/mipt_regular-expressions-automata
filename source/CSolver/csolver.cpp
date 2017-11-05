@@ -16,6 +16,7 @@ CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
 {
     ParseExpression();
     shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
+    CustomDFS();
 }
 
 void CSolver::ParseExpression() {
@@ -73,14 +74,36 @@ void CSolver::CustomDFS() {
     std::stack<CRotation> DFSStack;
 
     for (std::pair<size_t,char> v : automata.GetNextVerts(0)) {
-        CRotation temp(v.first, v.second, 0);
-        DFSStack.push(temp);
+        if (v.second == varepsilon){
+            CRotation temp(v.first, 0);
+            DFSStack.push(temp);
+        } else if (v.second == symbolX) {
+            CRotation temp(v.first, 1);
+            DFSStack.push(temp);
+        }
     }
 
     while (!DFSStack.empty()) {
-        CRotation tempVertice = DFSStack.top();
+        CRotation currentVertice = DFSStack.top();
         DFSStack.pop();
 
+
+        if (shadesOfGrey[currentVertice.vertice] > 0) {
+
+            for (std::pair<size_t,char> v : automata.GetNextVerts(currentVertice.vertice)) {
+                if (v.second == varepsilon) {
+                    DFSStack.push(CRotation(v.first, currentVertice.preflength));
+                } else if (v.second == symbolX) {
+                    DFSStack.push(CRotation(v.first, currentVertice.preflength+1));
+                }
+            }
+        }
+
+        shadesOfGrey[currentVertice.vertice] = shadesOfGrey[currentVertice.vertice] - 1;
+//
+//        if (currentVertice.preflength == prefLengthK) {
+////            dfs(currentVertice);
+//        }
 
     }
 }

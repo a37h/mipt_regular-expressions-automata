@@ -5,12 +5,13 @@
 #ifndef SOURCE_CROTATION_H
 #define SOURCE_CROTATION_H
 
+#include <cstdlib>
+
 struct CRotation {
 
-    CRotation(size_t vertice_, char symbol_, size_t preflength_);
+    CRotation(size_t vertice_, size_t preflength_);
 
     size_t vertice;
-    char symbol;
     size_t preflength;
 
 };

@@ -4,9 +4,8 @@
 
 #include "crotation.h"
 
-CRotation::CRotation(size_t vertice_, char symbol_, size_t preflength_):
+CRotation::CRotation(size_t vertice_, size_t preflength_):
         vertice(vertice_),
-        symbol(symbol_),
         preflength(preflength_)
 {
 }
