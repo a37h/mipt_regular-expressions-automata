@@ -54,6 +54,7 @@ protected:
 };
 
 CAutomata::CAutomata(char symbol) {
+    assert(symbol == 'a' || symbol == 'b' || symbol == 'c' || symbol == '1');
     // Случай автомата получаемого из символа '1'
     // Он состоит из единственного состояния
     // которое одновременно начальное и конечное
@@ -65,11 +66,10 @@ CAutomata::CAutomata(char symbol) {
 
         accepting_states.insert(0);
     }
-        // Случай автомата получаемого из буквы 'a', 'b', 'c'
-        // Состояний у нас 2, начальное и конечное
-        // Есть ребро с данным символом из начального в конечное
+    // Случай автомата получаемого из буквы 'a', 'b', 'c'
+    // Состояний у нас 2, начальное и конечное
+    // Есть ребро с данным символом из начального в конечное
     else {
-        assert(symbol == 'a' || symbol == 'b' || symbol == 'c');
         states_count=2;
 
         edges_matrix.resize(states_count);
@@ -81,6 +81,7 @@ CAutomata::CAutomata(char symbol) {
 }
 
 CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
+    assert(operation == '.' || operation == '+');
     switch (operation) {
         case '+': {
             // Состояний всего состояний в первом автомате, во втором
@@ -116,7 +117,6 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             }
             break;
         }
-
         case '.': {
             // Состояний всего состояний в первом автомате + во втором
             states_count = first->states_count + second->states_count;
@@ -150,40 +150,34 @@ CAutomata::CAutomata(CAutomata *first, CAutomata *second, char operation) {
             }
             break;
         }
-
-        default: {
-            exit(1);
-        }
     }
 }
 
 CAutomata::CAutomata(CAutomata *old_automata, char operation) {
-    if (operation == '*') {
-        // Состояний всего состояний в прежнем автомате + 1
-        states_count = old_automata->states_count + 1;
-        edges_matrix.resize(states_count);
-        for (auto &&i: edges_matrix) i.resize(states_count);
-        // Начинаем заполнять матрицу графа ребрами прежнего автомата
-        int offset = 1;
-        // Копируем ребра из прежнего
-        for (size_t i = 0; i < old_automata->states_count; ++i) {
-            for (size_t j = 0; j < old_automata->states_count; ++j) {
-                edges_matrix[i + offset][j + offset] = old_automata->edges_matrix[i][j];
-            }
+    assert (operation == '*');
+    // Состояний всего состояний в прежнем автомате + 1
+    states_count = old_automata->states_count + 1;
+    edges_matrix.resize(states_count);
+    for (auto &&i: edges_matrix) i.resize(states_count);
+    // Начинаем заполнять матрицу графа ребрами прежнего автомата
+    int offset = 1;
+    // Копируем ребра из прежнего
+    for (size_t i = 0; i < old_automata->states_count; ++i) {
+        for (size_t j = 0; j < old_automata->states_count; ++j) {
+            edges_matrix[i + offset][j + offset] = old_automata->edges_matrix[i][j];
         }
-        // Добавляем eps-ребро из нового начального в прежнее начальное
-        edges_matrix[0][1] = varepsilon;
-        // Добавляем eps-рёбра из терминальных ранее вершин прежнего автомата
-        // в новое начальное состояние автомата
-        for (size_t v : old_automata->accepting_states) {
-            edges_matrix[offset+v][0] = varepsilon;
-        }
-        // Единственное конечное состояние нового автомата будет
-        // его начальное состояние
-        accepting_states.insert(0);
-    } else {
-        exit(1);
-    };
+    }
+    // Добавляем eps-ребро из нового начального в прежнее начальное
+    edges_matrix[0][1] = varepsilon;
+    // Добавляем eps-рёбра из терминальных ранее вершин прежнего автомата
+    // в новое начальное состояние автомата
+    for (size_t v : old_automata->accepting_states) {
+        edges_matrix[offset + v][0] = varepsilon;
+    }
+    // Единственное конечное состояние нового автомата будет
+    // его начальное состояние
+    accepting_states.insert(0);
+
 }
 
 namespace MyTests {
