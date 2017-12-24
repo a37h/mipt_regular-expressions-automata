@@ -139,7 +139,7 @@ void CSolver::CustomBFS(CRotation initialrotation) {
             for (std::pair<size_t,char> v : automata.GetNextVerts(currentRotation.vertice)) {
                 if (v.second == varepsilon) {
                     BFSQueue.push(CRotation(v.first, currentRotation.preflength));
-                } else if (v.second == symbolX) {
+                } else {
                     BFSQueue.push(CRotation(v.first, currentRotation.preflength+1));
                 }
             }
