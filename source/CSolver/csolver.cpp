@@ -11,6 +11,7 @@ CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
         shadesOfGrey(0)
 {
     ParseExpression();
+    ShowAutomata();
     shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
     CustomDFS();
     if (min_length == -1) {
@@ -38,7 +39,7 @@ void CSolver::ParseExpression() {
                     AutomataStack.pop();
                     CAutomata temp2 = AutomataStack.top();
                     AutomataStack.pop();
-                    AutomataStack.push(CAutomata(&temp1, &temp2, symbol));
+                    AutomataStack.push(CAutomata(&temp2, &temp1, symbol));
                 } else {
                     std::cout << "ERROR";
                     exit(1);
