@@ -11,7 +11,7 @@ CSolver::CSolver(std::string *expression_, char symbolX_, int prefLengthK_):
         shadesOfGrey(0)
 {
     ParseExpression();
-    ShowAutomata();
+//    ShowAutomata();
     shadesOfGrey.resize(automata.GetSize(),prefLengthK_);
     CustomDFS();
     if (min_length == -1) {
